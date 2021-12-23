@@ -3,7 +3,7 @@
   "author": "stagas",
   "short": "stagas/dynamic-cache",
   "description": "service worker where cache can be updated dynamically at runtime",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
