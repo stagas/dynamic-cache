@@ -1,0 +1,76 @@
+{
+  "name": "dynamic-cache",
+  "author": "stagas",
+  "short": "stagas/dynamic-cache",
+  "description": "service worker where cache can be updated dynamically at runtime",
+  "version": "0.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://git@github.com:stagas/dynamic-cache.git"
+  },
+  "keywords": [
+    "cache",
+    "dynamic",
+    "imports",
+    "service-worker",
+    "browser"
+  ],
+  "module": "dist/esm/index.js",
+  "main": "dist/cjs/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && echo done.",
+    "docs": "documentation readme src --resolve=node --pe ts --re ts --re d.ts --github --section=API --markdown-toc-max-depth=3",
+    "test": "jest",
+    "cov": "jest --coverage",
+    "lint": "eslint src && prettier --check src",
+    "build:watch": "onchange -i src --await-write-finish 400 -- npm run build",
+    "docs:watch": "onchange -i src --await-write-finish 400 -- npm run docs",
+    "test:watch": "jest --watchAll",
+    "cov:watch": "jest --coverage --watchAll",
+    "build:sw:cjs": "esbuild src/sw.ts --bundle --sourcemap=inline --outfile=dist/cjs/sw.js",
+    "build:sw:esm": "esbuild src/sw.ts --bundle --sourcemap=inline --outfile=dist/esm/sw.js",
+    "build:sw": "npm run build:sw:cjs && npm run build:sw:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json && npm run build:sw:cjs",
+    "build:esm": "tsc -p tsconfig.esm.json && npm run build:sw:esm && echo '{\"type\":\"module\"}' >dist/esm/package.json",
+    "build:min": "esbuild src/index.ts --bundle --format=esm | terser --compress --module --mangle -o build.min.js",
+    "lint:fix": "eslint --fix src && prettier --write src",
+    "clean": "rimraf dist",
+    "prepack": "npm run build",
+    "prepack:dry": "npm pack --dry-run",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@stagas/documentation-fork": "^13.2.5",
+    "@stagas/sucrase-jest-plugin": "^2.2.0-fork",
+    "@swc-node/jest": "^1.4.1",
+    "@tsconfig/node16": "^1.0.2",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.12",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "esbuild": "^0.14.3",
+    "esbuild-register": "^3.2.1",
+    "eslint": "^8.4.1",
+    "eslint-plugin-import": "^2.25.3",
+    "husky": "^7.0.4",
+    "jest": "^27.4.4",
+    "onchange": "^7.1.0",
+    "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
+    "run-in-client": "^1.0.0",
+    "terser": "^5.10.0",
+    "ts-jest": "^27.1.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.3"
+  }
+}
